@@ -1,5 +1,4 @@
-﻿
-namespace Climber
+﻿namespace Climber
 {
     public class GenericFixedDrawable : FixedDrawableEntity
     {

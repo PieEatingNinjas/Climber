@@ -24,7 +24,7 @@ namespace Climber
         private void Timer_Tick(object sender, object e)
         {
             IEnemy enemy = null;
-            var row = game.Random.Next(9);
+            var row = game.Random.Next(GameConstants.NUMBEROFROWS-1);
             if (Math.Abs(row-game.Player.Row) > 1 && game.Random.Next(5) == 1)
                 enemy = new Spider(row, 5000);
             else

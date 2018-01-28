@@ -15,19 +15,23 @@ namespace Climber
 
         protected override void StartInternal()
         {
-            TranslateTransform.Y = Row * GameConstants.ROWHEIGHT;
-
-            DoubleAnimation position = new DoubleAnimation();
-            position.From = 0;// -GameConstants.DRAWABLEWIDTH;
-            position.To = GameConstants.CANVASWIDTH;// + GameConstants.DRAWABLEWIDTH;
-            position.Duration = new Duration(TimeSpan.FromMilliseconds(TTL));
-            position.SetValue(Storyboard.TargetPropertyProperty, "(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)");
-            Storyboard.SetTarget(position, UIElement);
+            TranslateTransform.Y = GetYPosition(Row);
 
             var sb = new Storyboard();
-            sb.Children.Add(position);
+            sb.Children.Add(GetHorizontalAnimation());
             sb.Begin();
             sb.Completed += Sb_Completed;
+        }
+
+        private DoubleAnimation GetHorizontalAnimation()
+        {
+            DoubleAnimation yPosition = new DoubleAnimation();
+            yPosition.From = 0;
+            yPosition.To = GameConstants.CANVASWIDTH;
+            yPosition.Duration = new Duration(TimeSpan.FromMilliseconds(TTL));
+            yPosition.SetValue(Storyboard.TargetPropertyProperty, TranslateTransformX);
+            Storyboard.SetTarget(yPosition, UIElement);
+            return yPosition;
         }
 
         private void Sb_Completed(object sender, object e)

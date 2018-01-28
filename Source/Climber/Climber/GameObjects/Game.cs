@@ -27,7 +27,8 @@ namespace Climber
             set { _BananaCount = value; OnPropertyChanged(); }
         }
 
-        public Player Player { get; }
+        public IPlayer Player { get; }
+
         public List<IDrawableEntity> Drawables
         {
             get
@@ -49,7 +50,8 @@ namespace Climber
             };
             collisionTimer.Tick += CollisionTimer_Tick;
 
-            Player = new Player(GameConstants.NUMBEROFROWS / 2);
+            Player = new Player((GameConstants.NUMBEROFROWS / 2)-1);
+            GameCanvas.Children.Add(Player.UIElement);
 
             Enemies = new List<IEnemy>();
             Fruits = new List<IFruit>();
@@ -73,7 +75,7 @@ namespace Climber
 
         public void Start()
         {
-            GameCanvas.Children.Add(Player.UIElement);
+            Player.Start();
             collisionTimer.Start();
             BananaFactory.Start();
             EnemyFactory.Start();

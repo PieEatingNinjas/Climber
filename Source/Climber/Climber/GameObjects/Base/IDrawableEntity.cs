@@ -9,11 +9,9 @@ namespace Climber
         TextBlock UIElement { get; }
         int Row { get; }
         bool IsActive { get; }
-
         Rect GetRect(Canvas canvas);
         void Start();
         void Destroy();
-
         event EventHandler Destroyed;
     }
 }

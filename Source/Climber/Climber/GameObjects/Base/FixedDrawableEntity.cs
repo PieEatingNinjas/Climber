@@ -15,8 +15,8 @@ namespace Climber
 
         protected override void StartInternal()
         {
-            TranslateTransform.Y = Row * GameConstants.ROWHEIGHT;
-            TranslateTransform.X = GameConstants.CANVASWIDTH / 2 - GameConstants.DRAWABLEWIDTH / 2;
+            TranslateTransform.Y = GetYPosition(Row);
+            TranslateTransform.X = GetCenterXPosition();
 
             if (ttl.HasValue)
             {

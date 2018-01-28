@@ -24,13 +24,13 @@ namespace Climber
 
         private void Timer_Tick(object sender, object e)
         {
-            var row = game.Random.Next(9);
+            var row = game.Random.Next(GameConstants.NUMBEROFROWS - 1);
 
             while (game.Fruits.Any(b => b.Row == row) || game.Player.Row == row || game.Enemies.Any(s => s is Spider && s.Row == row))
             {
                 row--;
                 if (row == -1)
-                    row = 8;
+                    row = GameConstants.NUMBEROFROWS - 1;
             }
             var banana = new Banana(row, 3000);
             banana.Start();

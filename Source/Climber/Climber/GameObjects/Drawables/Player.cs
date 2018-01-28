@@ -1,5 +1,4 @@
 ﻿using System;
-using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -7,103 +6,48 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Climber
 {
-    public class Player
+    public class Player : DrawableEntity, IPlayer
     {
-        public TextBlock UIElement { get; private set; }
-
-        public Rect GetRect(Canvas canvas)
-        {
-            return UIElement.TransformToVisual(canvas).TransformBounds(new Rect(new Point(0, 0), UIElement.RenderSize));
-        }
-
-        public int Row { get; private set; }
-        public string Char { get; set; } = "🐵";
-
-        ScaleTransform scaleTransform;
-        TranslateTransform translateTransform;
-        public Player(int rowStart)
-        {
-            Row = rowStart;
-            UIElement = new TextBlock();
-            UIElement.Text = Char;
-            UIElement.RenderTransformOrigin = new Point(.5, .5);
-            UIElement.FontSize = 30;
-            UIElement.Height = 45;
-            Canvas.SetZIndex(UIElement, 1000);
-
-            var group = new TransformGroup();
-            scaleTransform = new ScaleTransform();
-            translateTransform = new TranslateTransform();
-            translateTransform.X = 250 - 23;
-            translateTransform.Y = Row * 46;
-            group.Children.Add(scaleTransform);
-            group.Children.Add(translateTransform);
-            UIElement.RenderTransform = group;
-        }
-
-        public void Up()
-        {
-            if (canAnimate)
-            {
-                canAnimate = false;
-                Animate(true);
-            }
-        }
-
-        public void Down()
-        {
-            if (canAnimate)
-            {
-                canAnimate = false;
-                Animate(false);
-            }
-        }
-
         bool canAnimate = true;
-        private void Animate(bool isUp)
+
+        public override string Char => "🐵";
+
+        public Player(int row) : base(row)
         {
-            var newRow = Row + (isUp ? -1 : 1);
-            var y = newRow * 46;
+            Row = row;
+            Canvas.SetZIndex(UIElement, 1000);
+        }
 
-            DoubleAnimation position = new DoubleAnimation();
-            position.EasingFunction = new ExponentialEase()
+        public void Climb(ClimbingDirection direction)
+        {
+            if(canAnimate && CanClimb(direction))
             {
-                EasingMode = EasingMode.EaseInOut
-            };
-            position.To = y;
-            position.Duration = new Duration(TimeSpan.FromMilliseconds(100));
-            position.SetValue(Storyboard.TargetPropertyProperty, "(UIElement.RenderTransform).(TransformGroup.Children)[1].(TranslateTransform.Y)");
-            Storyboard.SetTarget(position, UIElement);
+                canAnimate = false;
+                ClimbWithAnimation(direction);
+            }
+        }
 
+        private bool CanClimb(ClimbingDirection direction)
+        {
+            var newRow = CaluculateNewRow(direction);
+            return newRow > -1 && newRow < GameConstants.NUMBEROFROWS-1;
+        }
 
-            DoubleAnimation scaleX = new DoubleAnimation();
-            scaleX.EasingFunction = new ExponentialEase()
-            {
-                EasingMode = EasingMode.EaseInOut
-            };
-            scaleX.To = 1.2;
-            scaleX.Duration = new Duration(TimeSpan.FromMilliseconds(100));
-            scaleX.AutoReverse = true;
-            scaleX.SetValue(Storyboard.TargetPropertyProperty, "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)");
-            Storyboard.SetTarget(scaleX, UIElement);
+        private int CaluculateNewRow(ClimbingDirection direction) 
+            => Row + (direction == ClimbingDirection.Up ? -1 : 1);
 
-            DoubleAnimation scaleY = new DoubleAnimation();
-            scaleY.EasingFunction = new ExponentialEase()
-            {
-                EasingMode = EasingMode.EaseInOut
-            };
-            scaleY.To = 1.2;
-            scaleY.Duration = new Duration(TimeSpan.FromMilliseconds(100));
-            scaleY.AutoReverse = true;
-            scaleY.SetValue(Storyboard.TargetPropertyProperty, "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)");
-            Storyboard.SetTarget(scaleY, UIElement);
+       
+        private void ClimbWithAnimation(ClimbingDirection direction)
+        {
+            var newRow = CaluculateNewRow(direction);
 
-
+            var verticalAnimation = GetVerticalAnimation(newRow);
+            var scaleAnimations = GetScaleAnimations();
 
             Storyboard sb = new Storyboard();
-            sb.Children.Add(position);
-            sb.Children.Add(scaleX);
-            sb.Children.Add(scaleY);
+            sb.Children.Add(verticalAnimation);
+            sb.Children.Add(scaleAnimations.xAnimation);
+            sb.Children.Add(scaleAnimations.yAnimation);
 
             sb.Begin();
             sb.Completed += (_, __) =>
@@ -111,6 +55,52 @@ namespace Climber
                 Row = newRow;
                 canAnimate = true;
             };
+        }
+
+        protected override void StartInternal()
+        {
+            TranslateTransform.Y = GetYPosition(Row);
+            TranslateTransform.X = GetCenterXPosition();
+        }
+
+        private DoubleAnimation GetVerticalAnimation(int toRow)
+        {
+            DoubleAnimation yPosition = new DoubleAnimation();
+            yPosition.EasingFunction = new ExponentialEase()
+            {
+                EasingMode = EasingMode.EaseInOut
+            };
+            yPosition.To = toRow * GameConstants.ROWHEIGHT;
+            yPosition.Duration = new Duration(TimeSpan.FromMilliseconds(100));
+            yPosition.SetValue(Storyboard.TargetPropertyProperty, TranslateTransformY);
+            Storyboard.SetTarget(yPosition, UIElement);
+            return yPosition;
+        }
+
+        private (DoubleAnimation xAnimation, DoubleAnimation yAnimation) GetScaleAnimations()
+        {
+            var xScale = GetBaseScaleAnimation();
+            xScale.SetValue(Storyboard.TargetPropertyProperty, ScaleTransformX);
+            Storyboard.SetTarget(xScale, UIElement);
+
+            var yScale = GetBaseScaleAnimation();
+            yScale.SetValue(Storyboard.TargetPropertyProperty, ScaleTransformY);
+            Storyboard.SetTarget(yScale, UIElement);
+
+            return (xScale, yScale);
+        }
+
+        private DoubleAnimation GetBaseScaleAnimation()
+        {
+            DoubleAnimation scale = new DoubleAnimation();
+            scale.EasingFunction = new ExponentialEase()
+            {
+                EasingMode = EasingMode.EaseInOut
+            };
+            scale.To = 1.2;
+            scale.Duration = new Duration(TimeSpan.FromMilliseconds(100));
+            scale.AutoReverse = true;
+            return scale;
         }
     }
 }

@@ -13,7 +13,8 @@ namespace Climber
             }
             return CollisionType.None;
         }
-        public static CollisionType HandlePlayerCollision(Player player, IDrawableEntity entity2, Rect collisionRect)
+
+        public static CollisionType HandlePlayerCollision(IPlayer player, IDrawableEntity entity2, Rect collisionRect)
         {
             if (entity2 is IFruit)
             {

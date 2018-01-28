@@ -7,6 +7,11 @@ namespace Climber
 {
     public abstract class DrawableEntity : IDisposable, IDrawableEntity
     {
+        protected const string TranslateTransformX = "(UIElement.RenderTransform).(TransformGroup.Children)[1].(TranslateTransform.X)";
+        protected const string TranslateTransformY = "(UIElement.RenderTransform).(TransformGroup.Children)[1].(TranslateTransform.Y)";
+        protected const string ScaleTransformX = "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)";
+        protected const string ScaleTransformY = "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)";
+
         public TextBlock UIElement { get; private set; }
         public int Row { get; protected set; }
         public abstract string Char { get; }
@@ -17,6 +22,10 @@ namespace Climber
 
         public event EventHandler Destroyed;
 
+        public TransformGroup TransformGroup { get; }
+
+        public ScaleTransform ScaleTransform { get; }
+
         public DrawableEntity(int row)
         {
             Row = row;
@@ -26,11 +35,12 @@ namespace Climber
             UIElement.FontSize = 30;
             UIElement.Height = GameConstants.ROWHEIGHT - 2;
 
-            var transformGroup = new TransformGroup();
+            TransformGroup = new TransformGroup();
             TranslateTransform = new TranslateTransform();
-            transformGroup.Children.Add(TranslateTransform);
-
-            UIElement.RenderTransform = transformGroup;
+            ScaleTransform = new ScaleTransform();
+            TransformGroup.Children.Add(ScaleTransform);
+            TransformGroup.Children.Add(TranslateTransform);
+            UIElement.RenderTransform = TransformGroup;
         }
 
         public Rect GetRect(Canvas canvas) 
@@ -55,5 +65,9 @@ namespace Climber
         protected virtual void DestroyInternal() { }
 
         public void Dispose() => UIElement = null;
+
+        public double GetYPosition(int row) => row * GameConstants.ROWHEIGHT;
+
+        public double GetCenterXPosition() => GameConstants.CANVASWIDTH / 2 - GameConstants.DRAWABLEWIDTH / 2;
     }
 }
