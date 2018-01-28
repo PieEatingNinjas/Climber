@@ -1,0 +1,63 @@
+﻿<Page
+    x:Class="Climber.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Climber"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid Background="Black" x:Name="maingrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="# 🍌:" Foreground="White" FontSize="25 "/>
+            <TextBlock Text="{x:Bind Game.BananaCount, Mode=OneWay}" Foreground="White" FontSize="25" />
+        </StackPanel>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Grid.Row="1">
+            <Grid.Background>
+                <ImageBrush ImageSource="Assets/forest-massive-tree-look-hdrnature-trees-nature-norway-wood-leaf-animated-awesome-green-hdredit-wallpaper.jpg" />
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#7DDBDBDB"/>
+            <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#1EDBDBDB"/>
+            <Grid Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#7DDBDBDB"/>
+            <Grid Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#1EDBDBDB"/>
+            <Grid Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#7DDBDBDB"/>
+            <Grid Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#1EDBDBDB"/>
+            <Grid Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#7DDBDBDB"/>
+            <Grid Grid.Row="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#1EDBDBDB"/>
+            <Grid Grid.Row="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#7DDBDBDB"/>
+            <!--<Viewbox Grid.RowSpan="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">-->
+                <Canvas Width="500" Height="500"
+                    Grid.RowSpan="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    x:Name="gameCanvas">
+                    <!--<TextBlock Text="🐵" x:Name="Monkey" Canvas.ZIndex="100"
+                       FontSize="30" Height="45"
+                       RenderTransformOrigin="1, 1">
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                            <TranslateTransform />
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>-->
+                </Canvas>
+            <!--</Viewbox>-->
+        </Grid>
+        <Image Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="image" Visibility="Collapsed">
+
+        </Image>
+    </Grid>
+</Page>
