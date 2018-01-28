@@ -17,21 +17,10 @@ namespace Climber
         {
             TranslateTransform.Y = GetYPosition(Row);
 
-            var sb = new Storyboard();
-            sb.Children.Add(GetHorizontalAnimation());
+            var sb = SnakeAnimationHelper.GetHorizontalAnimation(UIElement, 
+                new Duration(TimeSpan.FromMilliseconds(TTL)));
             sb.Begin();
             sb.Completed += Sb_Completed;
-        }
-
-        private DoubleAnimation GetHorizontalAnimation()
-        {
-            DoubleAnimation yPosition = new DoubleAnimation();
-            yPosition.From = 0;
-            yPosition.To = GameConstants.CANVASWIDTH;
-            yPosition.Duration = new Duration(TimeSpan.FromMilliseconds(TTL));
-            yPosition.SetValue(Storyboard.TargetPropertyProperty, TranslateTransformX);
-            Storyboard.SetTarget(yPosition, UIElement);
-            return yPosition;
         }
 
         private void Sb_Completed(object sender, object e)

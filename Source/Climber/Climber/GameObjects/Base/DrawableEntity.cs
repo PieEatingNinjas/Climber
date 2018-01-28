@@ -7,10 +7,10 @@ namespace Climber
 {
     public abstract class DrawableEntity : IDisposable, IDrawableEntity
     {
-        protected const string TranslateTransformX = "(UIElement.RenderTransform).(TransformGroup.Children)[1].(TranslateTransform.X)";
-        protected const string TranslateTransformY = "(UIElement.RenderTransform).(TransformGroup.Children)[1].(TranslateTransform.Y)";
-        protected const string ScaleTransformX = "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)";
-        protected const string ScaleTransformY = "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)";
+        internal const string TranslateTransformX = "(UIElement.RenderTransform).(TransformGroup.Children)[1].(TranslateTransform.X)";
+        internal const string TranslateTransformY = "(UIElement.RenderTransform).(TransformGroup.Children)[1].(TranslateTransform.Y)";
+        internal const string ScaleTransformX = "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)";
+        internal const string ScaleTransformY = "(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)";
 
         public TextBlock UIElement { get; private set; }
         public int Row { get; protected set; }

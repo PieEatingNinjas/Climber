@@ -98,6 +98,8 @@
     <Compile Include="BlankPage1.xaml.cs">
       <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameObjects\AnimationHelpers\PlayerAnimationHelper.cs" />
+    <Compile Include="GameObjects\AnimationHelpers\SnakeAnimationHelper.cs" />
     <Compile Include="GameObjects\Base\IDrawableEntity.cs" />
     <Compile Include="GameObjects\Base\IEnemy.cs" />
     <Compile Include="GameObjects\Base\IFruit.cs" />
