@@ -17,7 +17,7 @@ namespace Climber
         {
             TranslateTransform.Y = GetYPosition(Row);
 
-            var sb = SnakeAnimationHelper.GetHorizontalAnimation(UIElement, 
+            var sb = SnakeAnimationHelper.GetHorizontalAnimation(UIElement,
                 new Duration(TimeSpan.FromMilliseconds(TTL)));
             sb.Begin();
             sb.Completed += Sb_Completed;

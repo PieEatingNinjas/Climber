@@ -9,7 +9,7 @@ namespace Climber
         {
             DoubleAnimation horizontalAnimation = new DoubleAnimation
             {
-                From = 0,
+                From = 0-GameConstants.DRAWABLEWIDTH,
                 To = GameConstants.CANVASWIDTH,
                 Duration = duration
             };

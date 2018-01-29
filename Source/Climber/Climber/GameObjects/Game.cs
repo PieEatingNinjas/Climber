@@ -17,7 +17,7 @@ namespace Climber
 
         public Random Random { get; }
 
-        DispatcherTimer collisionTimer;
+        DispatcherTimer gameTimer;
 
         private int _BananaCount;
 
@@ -26,6 +26,7 @@ namespace Climber
             get { return _BananaCount; }
             set { _BananaCount = value; OnPropertyChanged(); }
         }
+
 
         public IPlayer Player { get; }
 
@@ -41,16 +42,35 @@ namespace Climber
         public List<IFruit> Fruits { get; }
         public Canvas GameCanvas { get; }
 
+        TimeSpan _ElapsedTime = new TimeSpan();
+        public TimeSpan ElapsedTime
+        {
+            get
+            {
+                return _ElapsedTime;
+            }
+            private set
+            {
+                _ElapsedTime = value;
+                OnPropertyChanged(nameof(ElapsedTimeString));
+            }
+        } 
+
+        public string ElapsedTimeString
+        {
+            get => ((int)ElapsedTime.TotalSeconds).ToString("D3");
+        }
+
         public Game(Canvas gameCanvas)
         {
             GameCanvas = gameCanvas;
-            collisionTimer = new DispatcherTimer()
+            gameTimer = new DispatcherTimer()
             {
                 Interval = TimeSpan.FromMilliseconds(50)
             };
-            collisionTimer.Tick += CollisionTimer_Tick;
+            gameTimer.Tick += GameTimer_Tick;
 
-            Player = new Player((GameConstants.NUMBEROFROWS / 2)-1);
+            Player = new Player(GameConstants.NUMBEROFROWS / 2);
             GameCanvas.Children.Add(Player.UIElement);
 
             Enemies = new List<IEnemy>();
@@ -76,11 +96,13 @@ namespace Climber
         public void Start()
         {
             Player.Start();
-            collisionTimer.Start();
+            gameTimer.Start();
             BananaFactory.Start();
             EnemyFactory.Start();
         }
+
         private void EnemyFactory_NewEnemey(object sender, IEnemy e) => AddEnemy(e);
+
         private void AddEnemy(IEnemy e)
         {
             lock(Lock)
@@ -103,11 +125,12 @@ namespace Climber
             }
         }
 
-        private void CollisionTimer_Tick(object sender, object o)
+        private void GameTimer_Tick(object sender, object o)
         {
+            ElapsedTime = ElapsedTime.Add(gameTimer.Interval);
             lock (Lock)
             {
-                collisionTimer.Stop();
+                gameTimer.Stop();
                 foreach (var item1 in Drawables.Where(d => d.IsActive))
                 {
                     var item1Rect = item1.GetRect(GameCanvas);
@@ -151,7 +174,7 @@ namespace Climber
 
                 Enemies.RemoveAll(en => !en.IsActive);
                 Fruits.RemoveAll(f => !f.IsActive);
-                collisionTimer.Start();
+                gameTimer.Start();
             }
         }
 

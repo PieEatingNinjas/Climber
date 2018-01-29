@@ -8,14 +8,25 @@
     mc:Ignorable="d">
     <Grid Background="Black" x:Name="maingrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="460" />
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Text="# 🍌:" Foreground="White" FontSize="25 "/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="500" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                    Grid.Column="1" Margin="25 0 0 0">
             <TextBlock Text="{x:Bind Game.BananaCount, Mode=OneWay}" Foreground="White" FontSize="25" />
+            <TextBlock Text="🍌" Foreground="White" FontSize="25"/>
         </StackPanel>
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Grid.Row="1">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                    Grid.Column="1" Margin="0 0 25 0">
+            <TextBlock Text="{x:Bind Game.ElapsedTimeString, Mode=OneWay}" Foreground="White" FontSize="25" />
+        </StackPanel>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="500" Grid.Row="1" Grid.Column="1">
             <Grid.Background>
                 <ImageBrush ImageSource="Assets/forest-massive-tree-look-hdrnature-trees-nature-norway-wood-leaf-animated-awesome-green-hdredit-wallpaper.jpg" />
             </Grid.Background>
@@ -39,23 +50,13 @@
             <Grid Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#7DDBDBDB"/>
             <Grid Grid.Row="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#1EDBDBDB"/>
             <Grid Grid.Row="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#7DDBDBDB"/>
-            <!--<Viewbox Grid.RowSpan="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">-->
-                <Canvas Width="500" Height="500"
+            <Canvas Width="500" Height="500"
                     Grid.RowSpan="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                     x:Name="gameCanvas">
-                    <!--<TextBlock Text="🐵" x:Name="Monkey" Canvas.ZIndex="100"
-                       FontSize="30" Height="45"
-                       RenderTransformOrigin="1, 1">
-                    <TextBlock.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform ScaleX="1" ScaleY="1" />
-                            <TranslateTransform />
-                        </TransformGroup>
-                    </TextBlock.RenderTransform>
-                </TextBlock>-->
-                </Canvas>
-            <!--</Viewbox>-->
+            </Canvas>
         </Grid>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Grid.Row="1" />
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Grid.Row="1" Grid.Column="2" />
         <Image Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="image" Visibility="Collapsed">
 
         </Image>

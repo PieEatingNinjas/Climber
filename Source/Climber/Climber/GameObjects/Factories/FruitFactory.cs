@@ -32,7 +32,7 @@ namespace Climber
                 if (row == -1)
                     row = GameConstants.NUMBEROFROWS - 1;
             }
-            var banana = new Banana(row, 3000);
+            var banana = new Banana(9, 3000);
             banana.Start();
             NewFruit?.Invoke(this, banana);
         }

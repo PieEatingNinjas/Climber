@@ -20,7 +20,7 @@ namespace Climber
 
         public void Climb(ClimbingDirection direction)
         {
-            if(canAnimate && CanClimb(direction))
+            if (canAnimate && CanClimb(direction))
             {
                 canAnimate = false;
                 ClimbWithAnimation(direction);
@@ -30,13 +30,12 @@ namespace Climber
         private bool CanClimb(ClimbingDirection direction)
         {
             var newRow = CaluculateNewRow(direction);
-            return newRow > -1 && newRow < GameConstants.NUMBEROFROWS-1;
+            return newRow > -1 && newRow < GameConstants.NUMBEROFROWS;
         }
 
-        private int CaluculateNewRow(ClimbingDirection direction) 
+        private int CaluculateNewRow(ClimbingDirection direction)
             => Row + (direction == ClimbingDirection.Up ? -1 : 1);
 
-       
         private void ClimbWithAnimation(ClimbingDirection direction)
         {
             var newRow = CaluculateNewRow(direction);
